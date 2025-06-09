@@ -111,26 +111,67 @@ La arquitectura hexagonal (Ports & Adapters) divide el sistema en capas:
 
 ```
 src/
-├── domain/
-│   ├── entities/
-│   ├── repositories/
-│   └── services/
-├── application/
-│   ├── use-cases/
-│   └── dtos/
-├── adapters/
-│   ├── in/
-│   │   ├── rest/
-│   │   └── websocket/
-│   └── out/
-│       ├── database/
-│       ├── payment/
-│       ├── notification/
-│       └── qr/
-├── infrastructure/
-│   ├── config/
-│   └── security/
+├── users/
+│   ├── domain/
+│   ├── application/
+│   └── infrastructure/
+├── events/
+│   ├── domain/
+│   ├── application/
+│   └── infrastructure/
+├── tickets/
+│   ├── domain/
+│   ├── application/
+│   └── infrastructure/
+├── orders/
+│   ├── domain/
+│   ├── application/
+│   └── infrastructure/
+├── qrcodes/
+│   ├── domain/
+│   ├── application/
+│   └── infrastructure/
+├── shared/
+│   ├── utils/
+│   ├── dtos/
+│   └── constants/
 └── main.ts
+```
+
+## Diagrama de estructura de carpetas
+
+```mermaid
+graph TD;
+  src --> users
+  src --> events
+  src --> tickets
+  src --> orders
+  src --> qrcodes
+  src --> shared
+
+  users --> users_domain["domain"]
+  users --> users_application["application"]
+  users --> users_infrastructure["infrastructure"]
+
+  events --> events_domain["domain"]
+  events --> events_application["application"]
+  events --> events_infrastructure["infrastructure"]
+
+  tickets --> tickets_domain["domain"]
+  tickets --> tickets_application["application"]
+  tickets --> tickets_infrastructure["infrastructure"]
+
+  orders --> orders_domain["domain"]
+  orders --> orders_application["application"]
+  orders --> orders_infrastructure["infrastructure"]
+
+  qrcodes --> qrcodes_domain["domain"]
+  qrcodes --> qrcodes_application["application"]
+  qrcodes --> qrcodes_infrastructure["infrastructure"]
+
+  shared --> shared_utils["utils"]
+  shared --> shared_dtos["dtos"]
+  shared --> shared_constants["constants"]
 ```
 
 ---
