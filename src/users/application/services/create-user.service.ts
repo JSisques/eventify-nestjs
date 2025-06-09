@@ -8,7 +8,7 @@ export class CreateUserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async execute(user: CreateUserDto): Promise<User> {
-    const userEntity = User.create(user.toPrimitives());
+    const userEntity = User.create(user);
     await this.userRepository.create(userEntity);
     return userEntity;
   }
