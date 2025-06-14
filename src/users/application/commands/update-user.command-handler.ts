@@ -5,6 +5,7 @@ import { Logger } from '@nestjs/common';
 import { UserRepository } from '../ports/user.repository';
 import { UserNotFoundException } from 'src/users/domain/exceptions/user-not-found.exception';
 import { UserFactory } from 'src/users/domain/factories/user.factory';
+import { UserUpdatedEvent } from 'src/users/domain/events/user-updated.event';
 
 /**
  * Command handler for updating a user's information
@@ -23,7 +24,6 @@ export class UpdateUserCommandHandler
    */
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly userFactory: UserFactory,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -45,6 +45,10 @@ export class UpdateUserCommandHandler
       ...command.updatedData,
     });
 
-    return this.userRepository.update(updatedUser);
+    this.userRepository.update(updatedUser);
+    this.eventBus.publish(new UserUpdatedEvent(updatedUser));
+    this.logger.debug('User updated event published');
+
+    return updatedUser;
   }
 }
