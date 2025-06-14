@@ -4,10 +4,13 @@ import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const logger = new Logger('Main');
+
   const app = await NestFactory.create(
     AppModule.register({ driver: 'in-memory' }),
   );
-  await app.listen(process.env.PORT ?? 3000);
-  logger.log(`Server is running on port ${process.env.PORT ?? 3000}`);
+
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port);
+  logger.log(`Server is running on port ${port}`);
 }
 bootstrap();
