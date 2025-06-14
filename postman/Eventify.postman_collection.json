@@ -1,0 +1,299 @@
+{
+	"info": {
+		"_postman_id": "f26cd8b9-e9c2-4282-aa19-ee23d5979a2f",
+		"name": "Eventify",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10330801"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parsear la respuesta JSON",
+									"const response = pm.response.json();",
+									"",
+									"// Extraer id y email.value",
+									"const userId = response.id;",
+									"const userEmail = response.email.value;",
+									"",
+									"// Guardar variables en la colección",
+									"pm.collectionVariables.set(\"userId\", userId);",
+									"pm.collectionVariables.set(\"userEmail\", userEmail);",
+									"",
+									"console.log(\"User ID guardado en variable de colección:\", userId);",
+									"console.log(\"User Email guardado en variable de colección:\", userEmail);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/{{userId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByEmail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parsear la respuesta JSON",
+									"const response = pm.response.json();",
+									"",
+									"// Extraer id y email.value",
+									"const userId = response.id;",
+									"const userEmail = response.email.value;",
+									"",
+									"// Guardar variables en la colección",
+									"pm.collectionVariables.set(\"userId\", userId);",
+									"pm.collectionVariables.set(\"userEmail\", userEmail);",
+									"",
+									"console.log(\"User ID guardado en variable de colección:\", userId);",
+									"console.log(\"User Email guardado en variable de colección:\", userEmail);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/email/{{userEmail}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"email",
+								"{{userEmail}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parsear la respuesta JSON",
+									"const response = pm.response.json();",
+									"",
+									"// Extraer id y email.value",
+									"const userId = response.id;",
+									"const userEmail = response.email.value;",
+									"",
+									"// Guardar variables en la colección",
+									"pm.collectionVariables.set(\"userId\", userId);",
+									"pm.collectionVariables.set(\"userEmail\", userEmail);",
+									"",
+									"console.log(\"User ID guardado en variable de colección:\", userId);",
+									"console.log(\"User Email guardado en variable de colección:\", userEmail);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"johndoe@mail.com\",\n    \"password\": \"1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parsear la respuesta JSON",
+									"const response = pm.response.json();",
+									"",
+									"// Extraer id y email.value",
+									"const userId = response.id;",
+									"const userEmail = response.email.value;",
+									"",
+									"// Guardar variables en la colección",
+									"pm.collectionVariables.set(\"userId\", userId);",
+									"pm.collectionVariables.set(\"userEmail\", userEmail);",
+									"",
+									"console.log(\"User ID guardado en variable de colección:\", userId);",
+									"console.log(\"User Email guardado en variable de colección:\", userEmail);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"{{userId}}\",\n    \"name\": \"John Doe Gonzalez\",\n    \"password\": \"1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/{{userId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "8c7b8d45-bebf-4d05-b008-c1f1efb2eac8",
+			"type": "string"
+		},
+		{
+			"key": "userEmail",
+			"value": "example@mail.com",
+			"type": "string"
+		}
+	]
+}
