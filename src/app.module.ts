@@ -6,19 +6,12 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { ApplicationBootstrapOptions } from './common/interfaces/application-bootstrap-options.interface';
 import { UsersModule } from './users/application/users.module';
 import { UsersInfrastructureModule } from './users/infrastructure/users-infrastructure.module';
-import { APP_FILTER } from '@nestjs/core';
-import { DomainExceptionFilter } from 'shared/infrastructure/filters/domain-exception.filter';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
-  imports: [CqrsModule.forRoot(), CoreModule],
+  imports: [CqrsModule.forRoot(), CoreModule, SharedModule],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_FILTER,
-      useClass: DomainExceptionFilter,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {
   static register(options: ApplicationBootstrapOptions) {
