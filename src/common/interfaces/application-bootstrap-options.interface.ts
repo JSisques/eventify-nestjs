@@ -1,3 +1,10 @@
+/**
+ * Interface defining options for bootstrapping the application
+ */
 export interface ApplicationBootstrapOptions {
-  driver: 'type-orm' | 'in-memory';
+  /**
+   * The storage driver to use for the application
+   * @type {'in-memory'} - Currently only supports in-memory storage
+   */
+  driver: 'in-memory';
 }
