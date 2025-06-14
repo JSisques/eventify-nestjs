@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { UsersService } from '../../application/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +21,8 @@ import { DeleteUserCommand } from 'src/users/application/commands/delete-user.co
  */
 @Controller('users')
 export class UsersController {
+  private readonly logger = new Logger(UsersController.name);
+
   constructor(private readonly usersService: UsersService) {}
 
   /**
