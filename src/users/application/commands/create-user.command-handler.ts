@@ -5,6 +5,7 @@ import { UserFactory } from 'src/users/domain/factories/user.factory';
 import { Logger } from '@nestjs/common';
 import { UserCreatedEvent } from 'src/users/domain/events/user-created.event';
 import { User } from 'src/users/domain/user';
+import { UserAlreadyExistsException } from 'src/users/domain/exceptions/user-already-exists.exception';
 
 /**
  * Command handler for creating a new user
@@ -36,6 +37,12 @@ export class CreateUserCommandHandler
     this.logger.debug(
       `Processing create user command: ${JSON.stringify(command)}`,
     );
+
+    const existingUser = await this.userRepository.findByEmail(
+      command.user.email,
+    );
+
+    if (existingUser) throw new UserAlreadyExistsException(command.user.email);
 
     const user = this.userFactory.create(
       command.user.name,
