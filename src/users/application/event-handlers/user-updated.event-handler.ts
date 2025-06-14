@@ -1,28 +1,29 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { UserCreatedEvent } from 'src/users/domain/events/user-created.event';
 import { Logger } from '@nestjs/common';
+import { UserUpdatedEvent } from 'src/users/domain/events/user-updated.event';
 
 /**
- * Event handler for processing user created events
+ * Event handler for processing user updated events
  */
-@EventsHandler(UserCreatedEvent)
-export class UserCreatedEventHandler
-  implements IEventHandler<UserCreatedEvent>
+@EventsHandler(UserUpdatedEvent)
+export class UserUpdatedEventHandler
+  implements IEventHandler<UserUpdatedEvent>
 {
-  private readonly logger = new Logger(UserCreatedEventHandler.name);
+  private readonly logger = new Logger(UserUpdatedEventHandler.name);
 
   /**
-   * Creates a new UserCreatedEventHandler instance
+   * Creates a new UserUpdatedEventHandler instance
    */
   constructor() {}
 
   /**
-   * Handles the user created event
-   * @param event The user created event containing the created user details
+   * Handles the user updated event
+   * @param event The user updated event containing the updated user details
+   * @returns A promise that resolves when the event has been handled
    */
-  async handle(event: UserCreatedEvent): Promise<void> {
+  async handle(event: UserUpdatedEvent): Promise<void> {
     this.logger.debug(
-      `Processing user created event: ${JSON.stringify(event)}`,
+      `Processing user updated event: ${JSON.stringify(event)}`,
     );
   }
 }
