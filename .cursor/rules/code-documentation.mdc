@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Everytime we create a new class or function it must be documented in jsdoc format.
