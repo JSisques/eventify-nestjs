@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { GetUsersQuery } from './queries/get-users.query';
+import { GetUserByEmailQuery } from './queries/get-user-by-email.query';
+import { GetUserByIdQuery } from './queries/get-user-by-id.query';
+import { CreateUserCommand } from './commands/create-user.command';
+import { UpdateUserCommand } from './commands/update-user.command';
+import { DeleteUserCommand } from './commands/delete-user.command';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   findAll() {
-    return `This action returns all users`;
+    return this.queryBus.execute(new GetUsersQuery());
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findById(id: string) {
+    return this.queryBus.execute(new GetUserByIdQuery(id));
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  findByEmail(email: string) {
+    return this.queryBus.execute(new GetUserByEmailQuery(email));
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  create(createUserCommand: CreateUserCommand) {
+    return this.commandBus.execute(createUserCommand);
+  }
+
+  update(updateUserCommand: UpdateUserCommand) {
+    return this.commandBus.execute(updateUserCommand);
+  }
+
+  remove(deleteUserCommand: DeleteUserCommand) {
+    return this.commandBus.execute(deleteUserCommand);
   }
 }

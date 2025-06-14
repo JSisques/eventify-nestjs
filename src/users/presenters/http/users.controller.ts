@@ -10,15 +10,13 @@ import {
 import { UsersService } from '../../application/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserCommand } from 'src/users/application/commands/create-user.command';
+import { UpdateUserCommand } from 'src/users/application/commands/update-user.command';
+import { DeleteUserCommand } from 'src/users/application/commands/delete-user.command';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
 
   @Get()
   findAll() {
@@ -26,17 +24,38 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  findById(@Param('id') id: string) {
+    return this.usersService.findById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Get('email/:email')
+  findByEmail(@Param('email') email: string) {
+    return this.usersService.findByEmail(email);
+  }
+
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(
+      new CreateUserCommand({
+        name: createUserDto.name,
+        email: createUserDto.email,
+        password: createUserDto.password,
+      }),
+    );
+  }
+
+  @Patch()
+  update(@Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(
+      new UpdateUserCommand(updateUserDto.id, {
+        name: updateUserDto.name,
+        email: updateUserDto.email,
+      }),
+    );
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(new DeleteUserCommand(id));
   }
 }
