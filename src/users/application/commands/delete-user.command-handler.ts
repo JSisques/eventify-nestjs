@@ -39,7 +39,11 @@ export class DeleteUserCommandHandler
 
     if (!user) throw new UserNotFoundException('User not found', command.id);
 
-    const deletedUser = await this.userRepository.delete(user);
+    const deletedUser = User.fromPrimitives({
+      ...user.toPrimitives(),
+    });
+
+    await this.userRepository.delete(deletedUser);
     this.logger.debug(`Deleted user: ${command.id}`);
 
     this.eventBus.publish(new UserDeletedEvent(deletedUser));

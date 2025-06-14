@@ -55,12 +55,11 @@ export class InMemoryUserRepository implements UserRepository {
   }
 
   async delete(user: User): Promise<User> {
+    this.logger.debug(`Deleting user: ${JSON.stringify(user)}`);
+
     const entity = UserMapper.toPersistence(user);
     this.users.delete(entity.id);
 
-    const deletedUser = this.users.get(entity.id);
-    this.logger.debug(`Deleted user: ${deletedUser}`);
-
-    return UserMapper.toDomain(deletedUser);
+    return UserMapper.toDomain(entity);
   }
 }
