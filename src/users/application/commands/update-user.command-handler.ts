@@ -1,9 +1,10 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateUserCommand } from './update-user.command';
 import { User } from 'src/users/domain/user';
 import { Logger } from '@nestjs/common';
 import { UserRepository } from '../ports/user.repository';
 import { UserNotFoundException } from 'src/users/domain/exceptions/user-not-found.exception';
+import { UserFactory } from 'src/users/domain/factories/user.factory';
 
 /**
  * Command handler for updating a user's information
@@ -20,7 +21,11 @@ export class UpdateUserCommandHandler
    * Creates a new instance of UpdateUserCommandHandler
    * @param {UserRepository} userRepository - The repository for user operations
    */
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly userFactory: UserFactory,
+    private readonly eventBus: EventBus,
+  ) {}
 
   /**
    * Executes the update user command
@@ -31,10 +36,15 @@ export class UpdateUserCommandHandler
   async execute(command: UpdateUserCommand): Promise<User> {
     this.logger.debug('Executing update user command');
 
-    const user = await this.userRepository.findById(command.id);
+    const existingUser = await this.userRepository.findById(command.id);
+    if (!existingUser)
+      throw new UserNotFoundException('User not found', command.id);
 
-    if (!user) throw new UserNotFoundException('User not found', command.id);
+    const updatedUser = User.fromPrimitives({
+      ...existingUser.toPrimitives(),
+      ...command.updatedData,
+    });
 
-    return this.userRepository.update(user);
+    return this.userRepository.update(updatedUser);
   }
 }

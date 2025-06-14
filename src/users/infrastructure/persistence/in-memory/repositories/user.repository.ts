@@ -43,11 +43,13 @@ export class InMemoryUserRepository implements UserRepository {
   }
 
   async update(user: User): Promise<User> {
+    this.logger.debug(`Updating user: ${JSON.stringify(user)}`);
+
     const entity = UserMapper.toPersistence(user);
     this.users.set(entity.id, entity);
 
     const updatedUser = this.users.get(entity.id);
-    this.logger.debug(`Updated user: ${updatedUser}`);
+    this.logger.debug(`Updated user: ${JSON.stringify(updatedUser)}`);
 
     return UserMapper.toDomain(updatedUser);
   }

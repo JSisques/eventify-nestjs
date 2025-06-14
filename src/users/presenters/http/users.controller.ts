@@ -77,10 +77,11 @@ export class UsersController {
    */
   @Patch()
   update(@Body() updateUserDto: UpdateUserDto) {
+    this.logger.debug(`Updating user: ${JSON.stringify(updateUserDto)}`);
     return this.usersService.update(
       new UpdateUserCommand(updateUserDto.id, {
         name: updateUserDto.name,
-        email: updateUserDto.email,
+        password: updateUserDto.password,
       }),
     );
   }

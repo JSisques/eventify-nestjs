@@ -31,17 +31,17 @@ export class UsersService {
   }
 
   create(createUserCommand: CreateUserCommand) {
-    this.logger.debug(`Creating user: ${createUserCommand}`);
+    this.logger.debug(`Creating user: ${JSON.stringify(createUserCommand)}`);
     return this.commandBus.execute(createUserCommand);
   }
 
   update(updateUserCommand: UpdateUserCommand) {
-    this.logger.debug(`Updating user: ${updateUserCommand}`);
+    this.logger.debug(`Updating user: ${JSON.stringify(updateUserCommand)}`);
     return this.commandBus.execute(updateUserCommand);
   }
 
   remove(deleteUserCommand: DeleteUserCommand) {
-    this.logger.debug(`Removing user: ${deleteUserCommand}`);
+    this.logger.debug(`Removing user: ${JSON.stringify(deleteUserCommand)}`);
     return this.commandBus.execute(deleteUserCommand);
   }
 }
