@@ -21,11 +21,13 @@ export class InMemoryUserRepository implements UserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
+    this.logger.debug(`Finding user by id: ${id}`);
     const entity = this.users.get(id);
     return entity ? UserMapper.toDomain(entity) : null;
   }
 
   async findByEmail(email: string): Promise<User | null> {
+    this.logger.debug(`Finding user by email: ${email}`);
     const entity = Array.from(this.users.values()).find(
       (user) => user.email === email,
     );
@@ -33,6 +35,7 @@ export class InMemoryUserRepository implements UserRepository {
   }
 
   async create(user: User): Promise<User> {
+    this.logger.debug(`Creating user: ${JSON.stringify(user)}`);
     const entity = UserMapper.toPersistence(user);
     this.users.set(entity.id, entity);
 
