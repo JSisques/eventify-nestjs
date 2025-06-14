@@ -1,5 +1,6 @@
 import { UserEmail } from './value-objects/user-email';
 import { UserPassword } from './value-objects/user-password';
+import { UserPrimitives } from './primitives/user-primitives';
 
 /**
  * Represents a user entity in the system
@@ -18,4 +19,22 @@ export class User {
     public readonly email: UserEmail,
     public readonly password: UserPassword,
   ) {}
+
+  static fromPrimitives(primitives: UserPrimitives): User {
+    return new User(
+      primitives.id,
+      primitives.name,
+      UserEmail.create(primitives.email),
+      UserPassword.create(primitives.password),
+    );
+  }
+
+  toPrimitives(): UserPrimitives {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email.value.toString(),
+      password: this.password.value.toString(),
+    };
+  }
 }
