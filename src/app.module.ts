@@ -7,9 +7,18 @@ import { ApplicationBootstrapOptions } from './common/interfaces/application-boo
 import { UsersModule } from './users/application/users.module';
 import { UsersInfrastructureModule } from './users/infrastructure/users-infrastructure.module';
 import { SharedModule } from 'src/shared/shared.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [CqrsModule.forRoot(), CoreModule, SharedModule],
+  imports: [
+    CqrsModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+    CoreModule,
+    SharedModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
