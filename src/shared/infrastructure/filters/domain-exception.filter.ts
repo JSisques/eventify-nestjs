@@ -11,32 +11,35 @@ import { InvalidUserIdException } from 'src/users/domain/exceptions/invalid-user
 import { UserAlreadyExistsException } from 'src/users/domain/exceptions/user-already-exists.exception';
 import { UserNotFoundException } from 'src/users/domain/exceptions/user-not-found.exception';
 
-@Catch(
-  UserAlreadyExistsException,
-  UserNotFoundException,
-  InvalidEmailException,
-  InvalidPasswordException,
-  InvalidUserIdException,
-)
+/**
+ * Filter that catches and handles domain exceptions thrown by the application
+ * Maps domain exceptions to appropriate HTTP status codes and formats error responses
+ */
+@Catch()
 export class DomainExceptionFilter implements ExceptionFilter {
+  /**
+   * Map of domain exceptions to their corresponding HTTP status codes
+   */
+  private readonly exceptionMap = new Map<Function, HttpStatus>([
+    [UserNotFoundException, HttpStatus.NOT_FOUND],
+    [UserAlreadyExistsException, HttpStatus.CONFLICT],
+    [InvalidEmailException, HttpStatus.BAD_REQUEST],
+    [InvalidPasswordException, HttpStatus.BAD_REQUEST],
+    [InvalidUserIdException, HttpStatus.BAD_REQUEST],
+  ]);
+
+  /**
+   * Catches and handles exceptions by converting them to HTTP responses
+   * @param exception - The caught exception
+   * @param host - The arguments host providing access to the underlying platform-specific request/response
+   */
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    let status = HttpStatus.BAD_REQUEST;
-    let message = exception.message;
-
-    if (exception instanceof UserNotFoundException) {
-      status = HttpStatus.NOT_FOUND;
-    } else if (exception instanceof UserAlreadyExistsException) {
-      status = HttpStatus.CONFLICT;
-    } else if (exception instanceof InvalidEmailException) {
-      status = HttpStatus.BAD_REQUEST;
-    } else if (exception instanceof InvalidPasswordException) {
-      status = HttpStatus.BAD_REQUEST;
-    } else if (exception instanceof InvalidUserIdException) {
-      status = HttpStatus.BAD_REQUEST;
-    }
+    const status =
+      this.exceptionMap.get(exception.constructor) || HttpStatus.BAD_REQUEST;
+    const message = exception.message;
 
     response.status(status).json({
       statusCode: status,
