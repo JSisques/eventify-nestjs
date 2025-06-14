@@ -24,8 +24,8 @@ export class User {
     return new User(
       primitives.id,
       primitives.name,
-      UserEmail.create(primitives.email),
-      UserPassword.create(primitives.password),
+      new UserEmail(primitives.email),
+      new UserPassword(primitives.password),
     );
   }
 
