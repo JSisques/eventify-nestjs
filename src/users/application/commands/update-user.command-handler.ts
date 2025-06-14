@@ -3,6 +3,7 @@ import { UpdateUserCommand } from './update-user.command';
 import { User } from 'src/users/domain/user';
 import { Logger } from '@nestjs/common';
 import { UserRepository } from '../ports/user.repository';
+import { UserNotFoundException } from 'src/users/domain/exceptions/user-not-found.exception';
 
 /**
  * Command handler for updating a user's information
@@ -29,6 +30,11 @@ export class UpdateUserCommandHandler
    */
   async execute(command: UpdateUserCommand): Promise<User> {
     this.logger.debug('Executing update user command');
-    return this.userRepository.update(command.id, command.updatedData);
+
+    const user = await this.userRepository.findById(command.id);
+
+    if (!user) throw new UserNotFoundException('User not found', command.id);
+
+    return this.userRepository.update(user);
   }
 }

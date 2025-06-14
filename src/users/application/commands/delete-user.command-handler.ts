@@ -4,6 +4,7 @@ import { UserRepository } from '../ports/user.repository';
 import { Logger } from '@nestjs/common';
 import { User } from 'src/users/domain/user';
 import { UserDeletedEvent } from 'src/users/domain/events/user-deleted.event';
+import { UserNotFoundException } from 'src/users/domain/exceptions/user-not-found.exception';
 
 /**
  * Command handler for deleting a user
@@ -33,7 +34,12 @@ export class DeleteUserCommandHandler
     this.logger.debug(
       `Processing delete user command: ${JSON.stringify(command)}`,
     );
-    const deletedUser = await this.userRepository.delete(command.id);
+
+    const user = await this.userRepository.findById(command.id);
+
+    if (!user) throw new UserNotFoundException('User not found', command.id);
+
+    const deletedUser = await this.userRepository.delete(user);
     this.logger.debug(`Deleted user: ${command.id}`);
 
     this.eventBus.publish(new UserDeletedEvent(deletedUser));

@@ -1,5 +1,4 @@
 import { User } from '../../domain/user';
-import { UpdateUserDto } from '../dtos/update-user.dto';
 
 /**
  * Abstract class representing a user repository
@@ -9,6 +8,6 @@ export abstract class UserRepository {
   public abstract findById(id: string): Promise<User | null>;
   public abstract findByEmail(email: string): Promise<User | null>;
   public abstract create(user: User): Promise<User>;
-  public abstract update(id: string, updatedData: UpdateUserDto): Promise<User>;
-  public abstract delete(id: string): Promise<User>;
+  public abstract update(user: User): Promise<User>;
+  public abstract delete(user: User): Promise<User>;
 }

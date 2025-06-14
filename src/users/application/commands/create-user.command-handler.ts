@@ -38,9 +38,9 @@ export class CreateUserCommandHandler
     );
 
     const user = this.userFactory.create(
-      command.name,
-      command.email,
-      command.password,
+      command.user.name,
+      command.user.email,
+      command.user.password,
     );
 
     const createdUser = await this.userRepository.create(user);
