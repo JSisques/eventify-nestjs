@@ -41,7 +41,7 @@ export class CoreModule {
         cacheModule = RedisCacheModule;
         break;
       default:
-        cacheModule = NoopCacheModule;
+        throw new Error(`Unsupported cache driver: ${options.cacheDriver}`);
     }
 
     return {
