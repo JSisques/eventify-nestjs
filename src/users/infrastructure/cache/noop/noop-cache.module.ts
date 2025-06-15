@@ -12,4 +12,4 @@ import { NoopCacheUserRepository } from './repositories/cache-user.repository';
   ],
   exports: [UserCacheRepository],
 })
-export class InMemoryCacheModule {}
+export class NoopCacheModule {}
