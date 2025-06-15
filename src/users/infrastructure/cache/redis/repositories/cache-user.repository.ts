@@ -3,6 +3,8 @@ import Redis from 'ioredis';
 import { UserCacheRepository } from 'src/users/application/ports/user-cache.repository';
 import { User } from 'src/users/domain/user';
 import { REDIS_CLIENT } from 'src/shared/infrastructure/redis/provider/redis.provider';
+import { CacheUserMapper } from '../mapper/cache-user.mapper';
+import { UserEntity } from '../entities/cache-user.entity';
 
 @Injectable()
 export class RedisCacheUserRepository implements UserCacheRepository {
@@ -12,21 +14,28 @@ export class RedisCacheUserRepository implements UserCacheRepository {
 
   async getUserById(id: string): Promise<User | null> {
     this.logger.debug(`Getting user by id: ${id}`);
-    throw new Error('Not implemented');
+    const entity = await this.redisClient.get(id);
+    const parsedEntity = JSON.parse(entity) as UserEntity;
+    return entity ? CacheUserMapper.toDomain(parsedEntity) : null;
   }
 
   async getUserByEmail(email: string): Promise<User | null> {
     this.logger.debug(`Getting user by email: ${email}`);
-    throw new Error('Not implemented');
+    const entity = await this.redisClient.get(email);
+    const parsedEntity = JSON.parse(entity) as UserEntity;
+    return entity ? CacheUserMapper.toDomain(parsedEntity) : null;
   }
 
   async setUser(user: User): Promise<void> {
     this.logger.debug(`Setting user: ${user.id}`);
-    throw new Error('Not implemented');
+    await this.redisClient.set(
+      user.id,
+      JSON.stringify(CacheUserMapper.toPersistence(user)),
+    );
   }
 
   async deleteUser(id: string): Promise<void> {
     this.logger.debug(`Deleting user: ${id}`);
-    throw new Error('Not implemented');
+    await this.redisClient.del(id);
   }
 }
