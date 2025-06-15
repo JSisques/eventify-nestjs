@@ -7,7 +7,7 @@ async function bootstrap() {
   const logger = new Logger('Main');
 
   const options: ApplicationBootstrapOptions = {
-    driver: 'in-memory',
+    driver: 'type-orm',
     cacheDriver: 'redis',
   };
 

@@ -3,14 +3,21 @@ import { InMemoryPersistanceModule } from './persistence/in-memory/in-memory-per
 import { InMemoryCacheModule } from './cache/in-memory/in-memory-cache.module';
 import { NoopCacheModule } from './cache/noop/noop-cache.module';
 import { RedisCacheModule } from './cache/redis/redis-cache.module';
+import { TypeORMPersistanceModule } from './persistence/type-orm/type-orm-persistance.module';
 
 @Module({})
 export class UsersInfrastructureModule {
-  static use(driver: 'in-memory', cacheDriver: 'in-memory' | 'noop' | 'redis') {
+  static use(
+    driver: 'in-memory' | 'type-orm',
+    cacheDriver: 'in-memory' | 'noop' | 'redis',
+  ) {
     let persistenceModule;
     switch (driver) {
       case 'in-memory':
         persistenceModule = InMemoryPersistanceModule;
+        break;
+      case 'type-orm':
+        persistenceModule = TypeORMPersistanceModule;
         break;
       default:
         persistenceModule = InMemoryPersistanceModule;
