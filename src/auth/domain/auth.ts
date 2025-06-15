@@ -34,7 +34,7 @@ export class Auth {
     return {
       id: this.id,
       userId: this.userId,
-      provider: this.provider.value.toString(),
+      provider: this.provider.getValue(),
       hashedPassword: this.hashedPassword,
       refreshToken: this.refreshToken,
       mfaEnabled: this.mfaEnabled,

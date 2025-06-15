@@ -27,6 +27,10 @@ export class AuthProvider {
     return new AuthProvider(value);
   }
 
+  public getValue(): string {
+    return this.value;
+  }
+
   /**
    * Checks if this provider equals another AuthProvider instance
    * @param other - The AuthProvider instance to compare with
