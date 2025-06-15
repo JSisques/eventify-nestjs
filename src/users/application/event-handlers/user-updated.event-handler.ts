@@ -1,6 +1,7 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { UserUpdatedEvent } from 'src/users/domain/events/user-updated.event';
+import { UserCacheRepository } from '../ports/user-cache.repository';
 
 /**
  * Event handler for processing user updated events
@@ -14,7 +15,7 @@ export class UserUpdatedEventHandler
   /**
    * Creates a new UserUpdatedEventHandler instance
    */
-  constructor() {}
+  constructor(private readonly userCacheRepository: UserCacheRepository) {}
 
   /**
    * Handles the user updated event
@@ -22,8 +23,6 @@ export class UserUpdatedEventHandler
    * @returns A promise that resolves when the event has been handled
    */
   async handle(event: UserUpdatedEvent): Promise<void> {
-    this.logger.debug(
-      `Processing user updated event: ${JSON.stringify(event)}`,
-    );
+    this.userCacheRepository.setUser(event.user);
   }
 }

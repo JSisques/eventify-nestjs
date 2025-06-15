@@ -47,13 +47,9 @@ export class UpdateUserCommandHandler
       ...command.updatedData,
     });
 
+    //TODO: Check if the user is updated and if not, throw an error
     this.userRepository.update(updatedUser);
-
-    this.userCacheRepository.setUser(updatedUser);
-    this.logger.debug('User cached');
-
     this.eventBus.publish(new UserUpdatedEvent(updatedUser));
-    this.logger.debug('User updated event published');
 
     return updatedUser;
   }
