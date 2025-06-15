@@ -7,4 +7,5 @@ export interface ApplicationBootstrapOptions {
    * @type {'in-memory'} - Currently only supports in-memory storage
    */
   driver: 'in-memory';
+  cacheDriver: 'in-memory' | 'redis';
 }
