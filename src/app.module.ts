@@ -8,7 +8,7 @@ import { UsersModule } from './users/application/users.module';
 import { UsersInfrastructureModule } from './users/infrastructure/users-infrastructure.module';
 import { SharedModule } from 'src/shared/shared.module';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth/application/auth.module';
 
 @Module({
   imports: [
