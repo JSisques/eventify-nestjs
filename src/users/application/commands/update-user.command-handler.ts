@@ -6,6 +6,7 @@ import { UserRepository } from '../ports/user.repository';
 import { UserNotFoundException } from 'src/users/domain/exceptions/user-not-found.exception';
 import { UserFactory } from 'src/users/domain/factories/user.factory';
 import { UserUpdatedEvent } from 'src/users/domain/events/user-updated.event';
+import { UserCacheRepository } from '../ports/user-cache.repository';
 
 /**
  * Command handler for updating a user's information
@@ -24,6 +25,7 @@ export class UpdateUserCommandHandler
    */
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly userCacheRepository: UserCacheRepository,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -46,6 +48,10 @@ export class UpdateUserCommandHandler
     });
 
     this.userRepository.update(updatedUser);
+
+    this.userCacheRepository.setUser(updatedUser);
+    this.logger.debug('User cached');
+
     this.eventBus.publish(new UserUpdatedEvent(updatedUser));
     this.logger.debug('User updated event published');
 
