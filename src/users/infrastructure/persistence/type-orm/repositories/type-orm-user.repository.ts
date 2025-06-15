@@ -3,6 +3,8 @@ import { UserRepository } from 'src/users/application/ports/user.repository';
 import { User } from 'src/users/domain/user';
 import { TypeORMUserMapper } from '../mapper/type-orm-user.mapper';
 import { TypeORMUserEntity } from '../entities/type-orm-user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 /**
  * TypeORM implementation of the UserRepository interface.
@@ -16,13 +18,18 @@ export class TypeOrmUserRepository implements UserRepository {
     TypeORMUserEntity
   >();
 
+  constructor(
+    @InjectRepository(TypeORMUserEntity)
+    private readonly userRepository: Repository<TypeORMUserEntity>,
+  ) {}
+
   /**
    * Retrieves all users from the in-memory storage
    * @returns Promise resolving to an array of User objects
    */
   async findAll(): Promise<User[]> {
     this.logger.debug('Finding all users');
-    const entities = Array.from(this.users.values());
+    const entities = await this.userRepository.find();
     this.logger.debug(`Found ${entities.length} users`);
 
     return entities.map((entity) => TypeORMUserMapper.toDomain(entity));
@@ -35,7 +42,7 @@ export class TypeOrmUserRepository implements UserRepository {
    */
   async findById(id: string): Promise<User | null> {
     this.logger.debug(`Finding user by id: ${id}`);
-    const entity = this.users.get(id);
+    const entity = await this.userRepository.findOne({ where: { id } });
     return entity ? TypeORMUserMapper.toDomain(entity) : null;
   }
 
@@ -46,9 +53,7 @@ export class TypeOrmUserRepository implements UserRepository {
    */
   async findByEmail(email: string): Promise<User | null> {
     this.logger.debug(`Finding user by email: ${email}`);
-    const entity = Array.from(this.users.values()).find(
-      (user) => user.email === email,
-    );
+    const entity = await this.userRepository.findOne({ where: { email } });
     return entity ? TypeORMUserMapper.toDomain(entity) : null;
   }
 
@@ -60,9 +65,7 @@ export class TypeOrmUserRepository implements UserRepository {
   async create(user: User): Promise<User> {
     this.logger.debug(`Creating user: ${JSON.stringify(user)}`);
     const entity = TypeORMUserMapper.toPersistence(user);
-    this.users.set(entity.id, entity);
-
-    const newUser = this.users.get(entity.id);
+    const newUser = await this.userRepository.save(entity);
     this.logger.debug(`Created user: ${newUser}`);
 
     return TypeORMUserMapper.toDomain(newUser);
@@ -77,9 +80,7 @@ export class TypeOrmUserRepository implements UserRepository {
     this.logger.debug(`Updating user: ${JSON.stringify(user)}`);
 
     const entity = TypeORMUserMapper.toPersistence(user);
-    this.users.set(entity.id, entity);
-
-    const updatedUser = this.users.get(entity.id);
+    const updatedUser = await this.userRepository.save(entity);
     this.logger.debug(`Updated user: ${JSON.stringify(updatedUser)}`);
 
     return TypeORMUserMapper.toDomain(updatedUser);
@@ -94,7 +95,7 @@ export class TypeOrmUserRepository implements UserRepository {
     this.logger.debug(`Deleting user: ${JSON.stringify(user)}`);
 
     const entity = TypeORMUserMapper.toPersistence(user);
-    this.users.delete(entity.id);
+    await this.userRepository.delete(entity.id);
 
     return TypeORMUserMapper.toDomain(entity);
   }

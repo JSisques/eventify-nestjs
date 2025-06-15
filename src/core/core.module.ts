@@ -23,6 +23,8 @@ export class CoreModule {
           username: process.env.POSTGRES_USER,
           password: process.env.POSTGRES_PASSWORD,
           database: process.env.POSTGRES_DB,
+          autoLoadEntities: process.env.NODE_ENV === 'development',
+          synchronize: process.env.NODE_ENV === 'development',
         });
         break;
       default:
