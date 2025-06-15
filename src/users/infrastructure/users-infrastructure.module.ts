@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { InMemoryPersistanceModule } from './persistence/in-memory/in-memory-persistance.module';
+import { InMemoryCacheModule } from './cache/in-memory/in-memory-cache.module';
 
 @Module({})
 export class UsersInfrastructureModule {
-  static use(driver: 'in-memory') {
+  static use(driver: 'in-memory', cacheDriver: 'in-memory' | 'redis') {
     let persistenceModule;
     switch (driver) {
       case 'in-memory':
@@ -13,10 +14,19 @@ export class UsersInfrastructureModule {
         persistenceModule = InMemoryPersistanceModule;
     }
 
+    let cacheModule;
+    switch (cacheDriver) {
+      case 'in-memory':
+        cacheModule = InMemoryCacheModule;
+        break;
+      default:
+        cacheModule = InMemoryCacheModule;
+    }
+
     return {
       module: UsersInfrastructureModule,
-      imports: [persistenceModule],
-      exports: [persistenceModule],
+      imports: [persistenceModule, cacheModule],
+      exports: [persistenceModule, cacheModule],
     };
   }
 }

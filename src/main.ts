@@ -6,7 +6,7 @@ async function bootstrap() {
   const logger = new Logger('Main');
 
   const app = await NestFactory.create(
-    AppModule.register({ driver: 'in-memory' }),
+    AppModule.register({ driver: 'in-memory', cacheDriver: 'in-memory' }),
   );
 
   const port = process.env.PORT ?? 3000;

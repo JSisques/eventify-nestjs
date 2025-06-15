@@ -29,7 +29,7 @@ export class AppModule {
       imports: [
         CoreModule.forRoot(options),
         UsersModule.withInfrastructure(
-          UsersInfrastructureModule.use(options.driver),
+          UsersInfrastructureModule.use(options.driver, options.cacheDriver),
         ),
       ],
     };
