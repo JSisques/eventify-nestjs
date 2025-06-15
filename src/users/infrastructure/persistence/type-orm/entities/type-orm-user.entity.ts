@@ -11,6 +11,6 @@ export class TypeORMUserEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column({ select: false })
+  @Column()
   password: string;
 }
