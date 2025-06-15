@@ -18,6 +18,7 @@ export class GetUserByEmailQueryHandler
   /**
    * Creates a new GetUserByEmailQueryHandler instance
    * @param userRepository The repository for accessing user data
+   * @param userCacheRepository The repository for accessing cached user data
    */
   constructor(
     private readonly userRepository: UserRepository,
@@ -41,11 +42,10 @@ export class GetUserByEmailQueryHandler
     this.logger.debug('Fetching from user repository');
     const user = await this.userRepository.findByEmail(query.email);
 
-    if (!user) {
+    if (!user)
       throw new UserNotFoundException(
         `User with email ${query.email} not found`,
       );
-    }
 
     await this.userCacheRepository.setUser(user);
     return user;
