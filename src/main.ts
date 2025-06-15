@@ -8,7 +8,7 @@ async function bootstrap() {
 
   const options: ApplicationBootstrapOptions = {
     driver: 'in-memory',
-    cacheDriver: 'in-memory',
+    cacheDriver: 'redis',
   };
 
   const app = await NestFactory.create(AppModule.register(options));

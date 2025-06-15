@@ -1,12 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import Redis from 'ioredis';
 import { UserCacheRepository } from 'src/users/application/ports/user-cache.repository';
-import { UserEntity } from '../entities/cache-user.entity';
-import { CacheUserMapper } from '../mapper/cache-user.mapper';
 import { User } from 'src/users/domain/user';
+import { REDIS_CLIENT } from 'src/shared/infrastructure/redis/provider/redis.provider';
 
 @Injectable()
 export class RedisCacheUserRepository implements UserCacheRepository {
   private readonly logger = new Logger(RedisCacheUserRepository.name);
+
+  constructor(@Inject(REDIS_CLIENT) private readonly redisClient: Redis) {}
 
   async getUserById(id: string): Promise<User | null> {
     this.logger.debug(`Getting user by id: ${id}`);
