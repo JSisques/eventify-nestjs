@@ -38,7 +38,7 @@ export class UpdateUserCommandHandler
 
     const existingUser = await this.userRepository.findById(command.id);
     if (!existingUser)
-      throw new UserNotFoundException('User not found', command.id);
+      throw new UserNotFoundException(`User with id ${command.id} not found`);
 
     const updatedUser = User.fromPrimitives({
       ...existingUser.toPrimitives(),
